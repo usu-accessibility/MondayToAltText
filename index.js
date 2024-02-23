@@ -168,7 +168,8 @@ function makePostRequestToAltText(courseId, courseIsPriority) {
     const data = {
         'course_id': courseId,
         'is_priority': courseIsPriority,
-        'oauth_consumer_key': access_token
+        'oauth_consumer_key': access_token,
+        'monday_load': true
     };
 
     return axios.post(url, data, { headers })

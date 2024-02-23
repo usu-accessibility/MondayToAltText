@@ -159,8 +159,8 @@ function addOrGetValuesOfBoard(action) {
 }
 
 function makePostRequestToAltText(courseId, courseIsPriority) {
-    // const url = "http://applications.accessapps.link:3003/load_images";
-    const url = "https://6f94-139-64-171-69.ngrok-free.app/load_images";
+    const url = "http://applications.accessapps.link:3003/load_images";
+    // const url = "https://6f94-139-64-171-69.ngrok-free.app/load_images";
     const headers = {
         'Content-Type': 'application/json'
     };

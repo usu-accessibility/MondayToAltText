@@ -88,7 +88,7 @@ async function addOrGetValuesOfBoard(action) {
             'Authorization': monday_api_key
         };
 
-        const data = {
+        let data = {
             'query': action
         };
 

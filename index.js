@@ -106,8 +106,8 @@ async function addOrGetValuesOfBoard(action) {
         console.log(res_data)
         if('boards' in res_data ){
             // Accumulate all items into a list
-            all_items = res['data']['boards'][0]['items_page']['items'];
-            let cursor = res['data']['boards'][0]['items_page']['cursor'];
+            all_items = all_items['data']['boards'][0]['items_page']['items'];
+            let cursor = all_items['data']['boards'][0]['items_page']['cursor'];
 
             // Continue paginating until there are no more items
             while (cursor) {
@@ -133,7 +133,7 @@ async function addOrGetValuesOfBoard(action) {
 
                 data = { 'query': query };
                 response = await axios.post(url, data, { headers });
-                res = response.data;
+                let res = response.data;
 
                 // Append items to the list
                 all_items = all_items.concat(res["data"]["next_items_page"]["items"]);

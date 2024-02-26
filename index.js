@@ -383,8 +383,7 @@ async function updateMondayBoardDoneStatus(bodyJSON) {
                 }
             }`;
 
-            const rowData = await addOrGetValuesOfBoard(getBoardDataQuery);
-            const items = rowData["data"]["boards"][0]["items_page"]["items"];
+            const items = await addOrGetValuesOfBoard(getBoardDataQuery);
             let url = '';
 
             let flag = false;

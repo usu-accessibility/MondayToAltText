@@ -80,7 +80,7 @@ function uploadFileToS3(bucket_name, file_key, data_dict, s3_client) {
     return s3_client.putObject(params).promise();
 }
 
-function addOrGetValuesOfBoard(action) {
+async function addOrGetValuesOfBoard(action) {
     try {
         const url = "https://api.monday.com/v2";
         const headers = {
@@ -92,12 +92,56 @@ function addOrGetValuesOfBoard(action) {
             'query': action
         };
 
-        return axios.post(url, data, { headers })
-            .then(response => response.data)
-            .catch(error => {
-                console.error(error);
-                throw error;
-            });
+        // return axios.post(url, data, { headers })
+        //     .then(response => response.data)
+        //     .catch(error => {
+        //         console.error(error);
+        //         throw error;
+        //     });
+
+        let response = await axios.post(url, data, { headers });
+        let all_items = response.data;
+        let res_data = all_items['data'];
+
+        if('board' in res_data ){
+            // Accumulate all items into a list
+            all_items = res['data']['boards'][0]['items_page']['items'];
+            let cursor = res['data']['boards'][0]['items_page']['cursor'];
+
+            // Continue paginating until there are no more items
+            while (cursor) {
+                let query = `
+                    query {
+                        next_items_page(limit:500, cursor:"${cursor}") {
+                            cursor
+                            items {
+                                id
+                                name
+                                column_values {
+                                    id
+                                    column {
+                                        id
+                                        title
+                                    }
+                                    value
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                data = { 'query': query };
+                response = await axios.post(url, data, { headers });
+                res = response.data;
+
+                // Append items to the list
+                all_items = all_items.concat(res["data"]["next_items_page"]["items"]);
+                cursor = res["data"]["next_items_page"]['cursor'];
+                console.log(all_items.length);
+            }
+        }
+
+        return all_items;
     }
     catch(error){
         console.log(error)
@@ -320,6 +364,7 @@ async function updateMondayBoardDoneStatus(bodyJSON) {
                 boards (ids:1206883120){
                     name
                     items_page {
+                        cursor
                         items {
                             id
                             name
@@ -417,11 +462,6 @@ app.post('/main', async (req, res) => {
             console.log(bodyJSON);
             await manageUnusableImage(bodyJSON);
         } 
-        // else if (bodyJSON !== null && 'tables' in bodyJSON) {
-        //     for (const table of bodyJSON['tables']) {
-        //         await getAltDatabase(table, bodyJSON['oauth_consumer_key']);
-        //     }
-        // } 
         else if (bodyJSON !== null && 'event' in bodyJSON) {
             res.json(await getMethodHandler(bodyJSON));
         } else if (bodyJSON !== null && 'challenge' in bodyJSON) {

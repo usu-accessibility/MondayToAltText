@@ -100,7 +100,7 @@ async function addOrGetValuesOfBoard(action) {
         //     });
 
         let response = await axios.post(url, data, { headers });
-        let all_items = response.data;
+        var all_items = response.data;
         let res_data = all_items['data'];
 
         if('boards' in res_data ){

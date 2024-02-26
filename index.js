@@ -125,6 +125,7 @@ async function addOrGetValuesOfBoard(action) {
                                         title
                                     }
                                     value
+                                    text
                                 }
                             }
                         }
@@ -372,8 +373,8 @@ async function updateMondayBoardDoneStatus(bodyJSON) {
                             column_values {
                                 id
                                 column {
-                                id
-                                title
+                                    id
+                                    title
                                 }
                                 value
                                 text

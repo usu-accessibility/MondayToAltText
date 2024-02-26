@@ -106,8 +106,8 @@ async function addOrGetValuesOfBoard(action) {
         if('boards' in res_data ){
             console.log(all_items)
             // Accumulate all items into a list
-            all_items = all_items['data']['boards'][0]['items_page']['items'];
             let cursor = all_items['data']['boards'][0]['items_page']['cursor'];
+            all_items = all_items['data']['boards'][0]['items_page']['items'];
 
             // Continue paginating until there are no more items
             while (cursor) {

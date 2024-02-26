@@ -103,6 +103,7 @@ async function addOrGetValuesOfBoard(action) {
         let all_items = response.data;
         let res_data = all_items['data'];
 
+        console.log(res_data)
         if('board' in res_data ){
             // Accumulate all items into a list
             all_items = res['data']['boards'][0]['items_page']['items'];
